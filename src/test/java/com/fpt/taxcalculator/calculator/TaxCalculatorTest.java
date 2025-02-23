@@ -1,8 +1,8 @@
 package com.fpt.taxcalculator.calculator;
 
-import com.fpt.taxcalculator.dataaccess.UserRepository;
 import com.fpt.taxcalculator.model.User;
 import com.fpt.taxcalculator.service.TaxCalculator;
+import com.fpt.taxcalculator.utils.UserFetching;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 class TaxCalculatorTest {
 
     @Mock
-    private UserRepository userRepository;
+    private UserFetching userFetching;
 
     @InjectMocks
     private TaxCalculator taxCalculator;
@@ -42,14 +42,14 @@ class TaxCalculatorTest {
         // Arrange
         User user = new User();
         user.setIncome(30.0);
-        when(userRepository.findByUserId(1L)).thenReturn(user);
+        when(userFetching.findByUserId(1L)).thenReturn(user);
 
         // Act
         double result = taxCalculator.calculate(1L);
 
         // Assert
         assertEquals(3.0, result, DELTA);
-        verify(userRepository, times(1)).findByUserId(1L);
+        verify(userFetching, times(1)).findByUserId(1L);
     }
 
     @Test
@@ -57,14 +57,14 @@ class TaxCalculatorTest {
         // Arrange
         User user = new User();
         user.setIncome(40.0);
-        when(userRepository.findByUserId(1L)).thenReturn(user);
+        when(userFetching.findByUserId(1L)).thenReturn(user);
 
         // Act
         double result = taxCalculator.calculate(1L);
 
         // Assert
         assertEquals(8.0, result, DELTA);
-        verify(userRepository, times(1)).findByUserId(1L);
+        verify(userFetching, times(1)).findByUserId(1L);
     }
 
     @Test
@@ -72,33 +72,33 @@ class TaxCalculatorTest {
         // Arrange
         User user = new User();
         user.setIncome(60.0);
-        when(userRepository.findByUserId(1L)).thenReturn(user);
+        when(userFetching.findByUserId(1L)).thenReturn(user);
 
         // Act
         double result = taxCalculator.calculate(1L);
 
         // Assert
         assertEquals(18.0, result, DELTA);
-        verify(userRepository, times(1)).findByUserId(1L);
+        verify(userFetching, times(1)).findByUserId(1L);
     }
 
     @Test
     void calculate_WhenUserRepositoryThrowsIOException_ShouldPropagateException() throws IOException {
         // Arrange
-        when(userRepository.findByUserId(1L)).thenThrow(new IOException("Database error"));
+        when(userFetching.findByUserId(1L)).thenThrow(new IOException("Database error"));
 
         // Act & Assert
         assertThrows(IOException.class, () -> taxCalculator.calculate(1L));
-        verify(userRepository, times(1)).findByUserId(1L);
+        verify(userFetching, times(1)).findByUserId(1L);
     }
 
     @Test
     void calculate_WhenUserNotFound_ShouldPropagateException() throws IOException {
         // Arrange
-        when(userRepository.findByUserId(1L)).thenThrow(new IllegalArgumentException());
+        when(userFetching.findByUserId(1L)).thenThrow(new IllegalArgumentException());
 
         // Act & Assert
         assertThrows(IllegalArgumentException.class, () -> taxCalculator.calculate(1L));
-        verify(userRepository, times(1)).findByUserId(1L);
+        verify(userFetching, times(1)).findByUserId(1L);
     }
 }

@@ -1,7 +1,7 @@
 package com.fpt.taxcalculator.service;
 
-import com.fpt.taxcalculator.dataaccess.UserRepository;
 import com.fpt.taxcalculator.model.User;
+import com.fpt.taxcalculator.utils.UserFetching;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 public class UserService {
-    private final UserRepository userRepository;
+    private final UserFetching userFetching;
 
     @Qualifier("standardRate")
     double taxStandardRate;
@@ -21,11 +21,11 @@ public class UserService {
     @Qualifier("above50Rate")
     double taxAbove50RateRate;
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserFetching userFetching) {
+        this.userFetching = userFetching;
     }
 
     public List<User> getUsers() throws IOException {
-        return userRepository.findAll();
+        return userFetching.findAll();
     }
 }

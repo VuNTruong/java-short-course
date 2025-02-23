@@ -1,20 +1,18 @@
-package com.fpt.taxcalculator.dataaccess;
+package com.fpt.taxcalculator.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fpt.taxcalculator.model.User;
-import com.fpt.taxcalculator.utils.JsonUtils;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public class UserRepository {
+@Component
+public class UserFetching {
     private final JsonUtils jsonUtils;
 
-public UserRepository(JsonUtils jsonUtils) {
+    public UserFetching(JsonUtils jsonUtils) {
         this.jsonUtils = jsonUtils;
     }
 

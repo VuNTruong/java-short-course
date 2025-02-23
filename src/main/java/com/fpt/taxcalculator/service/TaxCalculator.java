@@ -1,7 +1,7 @@
 package com.fpt.taxcalculator.service;
 
-import com.fpt.taxcalculator.dataaccess.UserRepository;
 import com.fpt.taxcalculator.model.User;
+import com.fpt.taxcalculator.utils.UserFetching;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -22,14 +22,14 @@ public class TaxCalculator {
     @Qualifier("above50Rate")
     double taxAbove50RateRate;
 
-    private final UserRepository userRepository;
+    private final UserFetching userFetching;
 
-    public TaxCalculator(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public TaxCalculator(UserFetching userFetching) {
+        this.userFetching = userFetching;
     }
 
     public double calculate(Long userId) throws IOException {
-        User user = userRepository.findByUserId(userId);
+        User user = userFetching.findByUserId(userId);
         double income = user.getIncome();
 
         if (income > 30 && income <= 50) {
