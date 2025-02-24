@@ -1,4 +1,4 @@
-package com.fpt.taxcalculator.utils;
+package com.fpt.taxcalculator.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

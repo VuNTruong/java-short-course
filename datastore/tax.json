@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "level": "level 1",
+    "rate": 0.1
+  },
+  {
+    "id": 2,
+    "level": "level 2",
+    "rate": 0.12
+  },
+  {
+    "id": 3,
+    "level": "level 3",
+    "rate": 0.2
+  }
+]

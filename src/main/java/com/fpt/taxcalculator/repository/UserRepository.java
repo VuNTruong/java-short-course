@@ -1,6 +1,7 @@
-package com.fpt.taxcalculator.utils;
+package com.fpt.taxcalculator.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fpt.taxcalculator.model.User;
 import org.springframework.stereotype.Component;
 
@@ -9,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class UserFetching {
+public class UserRepository {
     private final JsonUtils jsonUtils;
 
-    public UserFetching(JsonUtils jsonUtils) {
+    public UserRepository(JsonUtils jsonUtils) {
         this.jsonUtils = jsonUtils;
     }
 
@@ -21,10 +22,7 @@ public class UserFetching {
     }
 
     public User findByUserId(Long userId) throws IOException {
-        String filePath = "datastore/users.json";  // specify the path to your JSON file
-        TypeReference<List<User>> typeRef = new TypeReference<>() {};
-
-        List<User> users = jsonUtils.parseFromJson(filePath, typeRef);
+        List<User> users = getAllUsers();
         Optional<User> foundUser = users.stream().filter(user -> user.getId().equals(userId)).findFirst();
 
         if (foundUser.isEmpty()) {

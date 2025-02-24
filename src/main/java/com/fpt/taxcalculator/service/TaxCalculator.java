@@ -1,45 +1,33 @@
 package com.fpt.taxcalculator.service;
 
 import com.fpt.taxcalculator.model.User;
-import com.fpt.taxcalculator.utils.UserFetching;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 
 @Service
 public class TaxCalculator {
-    @Autowired
-    @Qualifier("standardRate")
-    double taxStandardRate;
+    private final UserService userService;
+    private final TaxService taxService;
 
-    @Autowired
-    @Qualifier("above30Rate")
-    double taxAbove30RateRate;
-
-    @Autowired
-    @Qualifier("above50Rate")
-    double taxAbove50RateRate;
-
-    private final UserFetching userFetching;
-
-    public TaxCalculator(UserFetching userFetching) {
-        this.userFetching = userFetching;
+    public TaxCalculator(UserService userService,
+                         TaxService taxService) {
+        this.userService = userService;
+        this.taxService = taxService;
     }
 
     public double calculate(Long userId) throws IOException {
-        User user = userFetching.findByUserId(userId);
+        User user = userService.findById(userId);
         double income = user.getIncome();
 
         if (income > 30 && income <= 50) {
-            return income * taxAbove30RateRate;
+            return income * taxService.findByLevel("level 2").getRate();
         }
 
         if (income > 50) {
-            return income * taxAbove50RateRate;
+            return income * taxService.findByLevel("level 3").getRate();
         }
 
-        return income * taxStandardRate;
+        return income * taxService.findByLevel("level 1").getRate();
     }
 }
