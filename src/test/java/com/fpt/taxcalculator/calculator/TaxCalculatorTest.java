@@ -28,11 +28,6 @@ class TaxCalculatorTest {
     @InjectMocks
     private TaxCalculator taxCalculator;
 
-    private static final double STANDARD_RATE = 0.1;
-    private static final double ABOVE_30_RATE = 0.2;
-    private static final double ABOVE_50_RATE = 0.3;
-    private static final double DELTA = 0.001;
-
     @BeforeEach
     void setUp() throws IOException {
         Tax level1Tax = new Tax();
@@ -44,9 +39,15 @@ class TaxCalculatorTest {
         Tax level3Tax = new Tax();
         level3Tax.setRate(0.3);
 
-        when(taxService.findByLevel("level 1")).thenReturn(level1Tax);
-        when(taxService.findByLevel("level 2")).thenReturn(level2Tax);
-        when(taxService.findByLevel("level 3")).thenReturn(level3Tax);
+        when(taxService.findByLevel(anyString())).thenAnswer(invocation -> {
+            String level = invocation.getArgument(0);
+            return switch (level) {
+                case "level 1" -> level1Tax;
+                case "level 2" -> level2Tax;
+                case "level 3" -> level3Tax;
+                default -> null;
+            };
+        });
     }
 
     @Test
@@ -54,7 +55,6 @@ class TaxCalculatorTest {
         // Arrange
         User user = new User();
         user.setIncome(30.0);
-
         when(userService.findById(1L)).thenReturn(user);
 
         // Act
@@ -64,53 +64,32 @@ class TaxCalculatorTest {
         assertEquals(3.0, result);
     }
 
-//    @Test
-//    void calculate_WhenIncomeBetween30And50_ShouldApplyAbove30Rate() throws IOException {
-//        // Arrange
-//        User user = new User();
-//        user.setIncome(40.0);
-//        when(userFetching.findByUserId(1L)).thenReturn(user);
-//
-//        // Act
-//        double result = taxCalculator.calculate(1L);
-//
-//        // Assert
-//        assertEquals(8.0, result, DELTA);
-//        verify(userFetching, times(1)).findByUserId(1L);
-//    }
-//
-//    @Test
-//    void calculate_WhenIncomeAbove50_ShouldApplyAbove50Rate() throws IOException {
-//        // Arrange
-//        User user = new User();
-//        user.setIncome(60.0);
-//        when(userFetching.findByUserId(1L)).thenReturn(user);
-//
-//        // Act
-//        double result = taxCalculator.calculate(1L);
-//
-//        // Assert
-//        assertEquals(18.0, result, DELTA);
-//        verify(userFetching, times(1)).findByUserId(1L);
-//    }
-//
-//    @Test
-//    void calculate_WhenUserRepositoryThrowsIOException_ShouldPropagateException() throws IOException {
-//        // Arrange
-//        when(userFetching.findByUserId(1L)).thenThrow(new IOException("Database error"));
-//
-//        // Act & Assert
-//        assertThrows(IOException.class, () -> taxCalculator.calculate(1L));
-//        verify(userFetching, times(1)).findByUserId(1L);
-//    }
-//
-//    @Test
-//    void calculate_WhenUserNotFound_ShouldPropagateException() throws IOException {
-//        // Arrange
-//        when(userFetching.findByUserId(1L)).thenThrow(new IllegalArgumentException());
-//
-//        // Act & Assert
-//        assertThrows(IllegalArgumentException.class, () -> taxCalculator.calculate(1L));
-//        verify(userFetching, times(1)).findByUserId(1L);
-//    }
+
+    @Test
+    void calculate_WhenIncomeBetween30And50_ShouldApplyAbove30Rate() throws IOException {
+        // Arrange
+        User user = new User();
+        user.setIncome(40.0);
+        when(userService.findById(1L)).thenReturn(user);
+
+        // Act
+        double result = taxCalculator.calculate(1L);
+
+        // Assert
+        assertEquals(8.0, result);
+    }
+
+    @Test
+    void calculate_WhenIncomeAbove50_ShouldApplyAbove50Rate() throws IOException {
+        // Arrange
+        User user = new User();
+        user.setIncome(60.0);
+        when(userService.findById(1L)).thenReturn(user);
+
+        // Act
+        double result = taxCalculator.calculate(1L);
+
+        // Assert
+        assertEquals(18.0, result);
+    }
 }
