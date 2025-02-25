@@ -1,7 +1,6 @@
 package com.fpt.taxcalculator.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fpt.taxcalculator.model.User;
 import org.springframework.stereotype.Component;
 

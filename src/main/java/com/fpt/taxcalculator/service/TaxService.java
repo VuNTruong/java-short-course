@@ -5,6 +5,7 @@ import com.fpt.taxcalculator.repository.TaxRepository;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 public class TaxService {
@@ -16,5 +17,9 @@ public class TaxService {
 
     public Tax findByLevel(String level) throws IOException {
         return taxRepository.findByLevel(level);
+    }
+
+    public List<Tax> getAllTaxConfigs() throws IOException {
+        return taxRepository.getAll();
     }
 }
