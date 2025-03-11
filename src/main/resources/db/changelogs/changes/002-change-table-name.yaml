@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      author: your_name
+      id: 1
+      context: rename-table
+      changes:
+        - renameTable:
+            oldTableName: user
+            newTableName: person

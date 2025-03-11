@@ -1,14 +1,24 @@
-package com.fpt.taxcalculatornobean.model;
+package com.fpt.taxcalculator.model;
 
-public class User {
+import jakarta.persistence.*;
+
+@Entity
+public class Person {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
+    @Column(name = "first_name")
     private String firstName;
 
+    @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "tax_code")
     private String taxCode;
 
+    @Column(name = "income")
     private double income;
 
     public Long getId() {
