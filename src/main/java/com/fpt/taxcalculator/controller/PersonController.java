@@ -3,10 +3,8 @@ package com.fpt.taxcalculator.controller;
 import com.fpt.taxcalculator.model.Person;
 import com.fpt.taxcalculator.model.PersonCreateRequestDTO;
 import com.fpt.taxcalculator.service.PersonService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,7 +18,7 @@ public class PersonController {
     }
 
     @PostMapping
-    public void create(PersonCreateRequestDTO request) {
+    public void create(@RequestBody @Valid PersonCreateRequestDTO request) {
         personService.createPerson(request);
     }
 
@@ -30,7 +28,7 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
-    public Person getById(Long id) {
+    public Person getById(@PathVariable Long id) {
         return personService.getPersonById(id);
     }
 }

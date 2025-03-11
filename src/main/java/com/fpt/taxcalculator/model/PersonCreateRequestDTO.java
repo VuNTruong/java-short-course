@@ -1,14 +1,22 @@
 package com.fpt.taxcalculator.model;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+
 public class PersonCreateRequestDTO {
     private Long id;
 
+    @NotNull(message = "First name field cannot be null")
     private String firstName;
 
+    @NotNull(message = "Last name field cannot be null")
     private String lastName;
 
+    @Size(min = 2, max = 10, message = "Tax code should have between 2 and 10 character")
     private String taxCode;
 
+    @Positive
     private double income;
 
     public Long getId() {

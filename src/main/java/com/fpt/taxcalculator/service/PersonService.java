@@ -27,6 +27,7 @@ public class PersonService {
     public void createPerson(PersonCreateRequestDTO request) {
         Person person = new Person();
 
+        person.setId(request.getId());
         person.setFirstName(request.getFirstName());
         person.setLastName(request.getLastName());
         person.setTaxCode(request.getTaxCode());
